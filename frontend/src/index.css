@@ -1,0 +1,294 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root,
+  [data-theme="ivory-editorial"],
+  .ivory-editorial,
+  .light {
+    --font-heading: 'Playfair Display', 'Noto Sans Devanagari', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', 'Noto Sans Devanagari', system-ui, sans-serif;
+
+    /* Theme A — Ivory Editorial (Default Prestigious Print & Warm Light Aesthetics) */
+    --color-bg-page: #F7F4ED;
+    --color-bg-surface: #FFFFFF;
+    --color-bg-card: #FFFFFF;
+    --color-bg-subtle: #EDE9DF;
+    --color-bg-contrast: #10172E;
+    --color-text-primary: #10172E;
+    --color-text-secondary: #334155;
+    --color-text-muted: #64748B;
+    --color-border: rgba(16, 23, 46, 0.12);
+    --color-border-card: rgba(16, 23, 46, 0.08);
+    --color-gold: #C68A27;
+    --color-gold-hover: #D8982D;
+    --color-navy: #10172E;
+    --color-ice-blue: #3B5284;
+    --color-shadow: rgba(16, 23, 46, 0.06);
+    --color-badge-bg: rgba(198, 138, 39, 0.1);
+    --color-badge-border: rgba(198, 138, 39, 0.28);
+  }
+
+  [data-theme="midnight-gold"],
+  .midnight-gold,
+  .dark {
+    --font-heading: 'Playfair Display', 'Noto Sans Devanagari', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', 'Noto Sans Devanagari', system-ui, sans-serif;
+
+    /* Theme B — Midnight Gold (Luxury Cinematic Studio) */
+    --color-bg-page: #10172E;
+    --color-bg-surface: #151D38;
+    --color-bg-card: #151D38;
+    --color-bg-subtle: #1C2649;
+    --color-bg-contrast: #080C18;
+    --color-text-primary: #F8FAFC;
+    --color-text-secondary: #CBD5E1;
+    --color-text-muted: #94A3B8;
+    --color-border: rgba(202, 220, 252, 0.14);
+    --color-border-card: rgba(202, 220, 252, 0.12);
+    --color-gold: #E9B13F;
+    --color-gold-hover: #F2C45F;
+    --color-navy: #10172E;
+    --color-ice-blue: #CADCFC;
+    --color-shadow: rgba(0, 0, 0, 0.55);
+    --color-badge-bg: rgba(233, 177, 63, 0.15);
+    --color-badge-border: rgba(233, 177, 63, 0.35);
+  }
+
+  [data-theme="modern-studio"],
+  .modern-studio {
+    /* Theme C — Modern Studio (High-Tech Broadcast & Electric Blue Accents) */
+    --color-bg-page: #0D1017;
+    --color-bg-surface: #141824;
+    --color-bg-card: #171C2B;
+    --color-bg-subtle: #1F2538;
+    --color-bg-contrast: #07090E;
+    --color-text-primary: #F1F5F9;
+    --color-text-secondary: #94A3B8;
+    --color-text-muted: #64748B;
+    --color-border: rgba(78, 128, 238, 0.18);
+    --color-border-card: rgba(78, 128, 238, 0.14);
+    --color-gold: #4E80EE;
+    --color-gold-hover: #6998F5;
+    --color-navy: #0D1017;
+    --color-ice-blue: #7CA5F5;
+    --color-shadow: rgba(0, 0, 0, 0.65);
+    --color-badge-bg: rgba(78, 128, 238, 0.15);
+    --color-badge-border: rgba(78, 128, 238, 0.35);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg-page);
+    color: var(--color-text-primary);
+    overflow-x: hidden;
+    transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+.font-serif {
+  font-family: 'Playfair Display', 'Noto Sans Devanagari', Georgia, serif;
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', system-ui, sans-serif;
+}
+
+/* Dynamic Theme Utilities */
+.theme-bg {
+  background-color: var(--color-bg-page);
+}
+
+.theme-surface {
+  background-color: var(--color-bg-surface);
+}
+
+.theme-card {
+  background-color: var(--color-bg-card);
+  border-color: var(--color-border);
+  box-shadow: 0 10px 25px -5px var(--color-shadow);
+}
+
+.theme-card-subtle {
+  background-color: var(--color-bg-subtle);
+  border-color: var(--color-border);
+}
+
+.theme-text-primary {
+  color: var(--color-text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.theme-text-muted {
+  color: var(--color-text-muted);
+}
+
+.theme-border {
+  border-color: var(--color-border);
+}
+
+/* Animated Navigation Gold Underline */
+.nav-underline {
+  position: relative;
+}
+
+.nav-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--color-gold);
+  border-radius: 9999px;
+  transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-underline:hover::after,
+.nav-underline.active::after {
+  width: 100%;
+}
+
+/* Glassmorphic Panels */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(16, 23, 46, 0.12);
+  box-shadow: 0 10px 25px -5px rgba(16, 23, 46, 0.05);
+}
+
+.dark .glass-panel {
+  background: rgba(21, 29, 56, 0.82);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* Staggered Hero Entrance Animations */
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroImageReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.97) translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-hero-1 {
+  animation: heroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+
+.animate-hero-2 {
+  animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
+}
+
+.animate-hero-3 {
+  animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+}
+
+.animate-hero-4 {
+  animation: heroFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.38s both;
+}
+
+.animate-hero-image {
+  animation: heroImageReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+/* Delicate Audio Waveform Animation */
+@keyframes waveBounce1 {
+  0%, 100% { height: 6px; }
+  50% { height: 18px; }
+}
+
+@keyframes waveBounce2 {
+  0%, 100% { height: 16px; }
+  50% { height: 7px; }
+}
+
+@keyframes waveBounce3 {
+  0%, 100% { height: 9px; }
+  50% { height: 22px; }
+}
+
+@keyframes waveBounce4 {
+  0%, 100% { height: 20px; }
+  50% { height: 8px; }
+}
+
+.audio-bar-1 { animation: waveBounce1 1.1s ease-in-out infinite; }
+.audio-bar-2 { animation: waveBounce2 0.9s ease-in-out infinite 0.2s; }
+.audio-bar-3 { animation: waveBounce3 1.25s ease-in-out infinite 0.1s; }
+.audio-bar-4 { animation: waveBounce4 1.05s ease-in-out infinite 0.3s; }
+
+/* Accessible Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom Minimal Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-page);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-navy);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold);
+}
+
+/* Scroll-Triggered Reveal Animations (Section 5) */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-stagger-1 { transition-delay: 90ms; }
+.reveal-stagger-2 { transition-delay: 180ms; }
+.reveal-stagger-3 { transition-delay: 270ms; }
+.reveal-stagger-4 { transition-delay: 360ms; }
+
+/* Subtle Image Scale & Card Hover Effects */
+.img-card-zoom {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.group:hover .img-card-zoom {
+  transform: scale(1.04);
+}
+

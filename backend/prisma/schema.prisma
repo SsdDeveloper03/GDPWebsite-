@@ -1,0 +1,141 @@
+// This is your Prisma schema file for Growth Ka Digital Partner (GDP)
+// Configured specifically for Microsoft SQL Server (Prisma v6)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String     @id @default(uuid()) @db.NVarChar(64)
+  displayName     String     @db.NVarChar(100)
+  email           String     @unique @db.NVarChar(255)
+  passwordHash    String?    @db.NVarChar(255)
+  profileImageUrl String?    @db.NVarChar(1000)
+  role            String     @default("USER") @db.NVarChar(20) // "USER", "ADMIN"
+  status          String     @default("ACTIVE") @db.NVarChar(20) // "ACTIVE", "SUSPENDED", "DEACTIVATED"
+  emailVerified   Boolean    @default(false)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  reviews         Review[]
+  auditLogs       AuditLog[]
+  sessions        Session[]
+
+  @@index([role])
+  @@index([status])
+}
+
+model Review {
+  id          String    @id @default(uuid()) @db.NVarChar(64)
+  userId      String    @unique @db.NVarChar(64) // Enforces one active review per user for the overall GDP brand
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rating      Int       // 1 to 5 stars
+  title       String?   @db.NVarChar(200)
+  content     String    @db.NVarChar(Max)
+  status      String    @default("PENDING") @db.NVarChar(20) // "PENDING", "APPROVED", "REJECTED", "HIDDEN"
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  approvedAt  DateTime?
+
+  @@index([status, createdAt])
+  @@index([rating])
+}
+
+model Video {
+  id               String    @id @default(uuid()) @db.NVarChar(64)
+  title            String    @db.NVarChar(300)
+  description      String?   @db.NVarChar(Max)
+  youtubeVideoId   String    @db.NVarChar(50)
+  thumbnailUrl     String?   @db.NVarChar(1000)
+  guestName        String?   @db.NVarChar(150)
+  guestRole        String?   @db.NVarChar(150)
+  category         String?   @db.NVarChar(100)
+  spotifyUrl       String?   @db.NVarChar(1000)
+  applePodcastsUrl String?   @db.NVarChar(1000)
+  isFeatured       Boolean   @default(false)
+  status           String    @default("DRAFT") @db.NVarChar(20) // "DRAFT", "PUBLISHED", "ARCHIVED"
+  displayOrder     Int       @default(0)
+  publishedAt      DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([status, displayOrder])
+  @@index([publishedAt])
+  @@index([isFeatured])
+  @@index([category])
+}
+
+model GuestApplication {
+  id                String   @id @default(uuid()) @db.NVarChar(64)
+  fullName          String   @db.NVarChar(150)
+  companyRole       String   @db.NVarChar(150)
+  email             String   @db.NVarChar(255)
+  phone             String?  @db.NVarChar(50)
+  expertiseArea     String   @db.NVarChar(200)
+  topicSummary      String   @db.NVarChar(Max)
+  linkedinOrWebsite String?  @db.NVarChar(1000)
+  status            String   @default("NEW") @db.NVarChar(20) // "NEW", "CONTACTED", "APPROVED", "REJECTED"
+  adminNotes        String?  @db.NVarChar(Max)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([email])
+}
+
+model ContactInquiry {
+  id        String   @id @default(uuid()) @db.NVarChar(64)
+  name      String   @db.NVarChar(150)
+  email     String   @db.NVarChar(255)
+  phone     String?  @db.NVarChar(50)
+  subject   String?  @db.NVarChar(250)
+  message   String   @db.NVarChar(Max)
+  status    String   @default("NEW") @db.NVarChar(20) // "NEW", "READ", "REPLIED", "ARCHIVED"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, createdAt])
+}
+
+model SiteConfiguration {
+  id          String   @id @default(uuid()) @db.NVarChar(64)
+  key         String   @unique @db.NVarChar(100)
+  value       String   @db.NVarChar(Max)
+  description String?  @db.NVarChar(500)
+  updatedAt   DateTime @updatedAt
+}
+
+model Session {
+  id        String   @id @default(uuid()) @db.NVarChar(64)
+  sid       String   @unique @db.NVarChar(128)
+  userId    String?  @db.NVarChar(64)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  data      String   @db.NVarChar(Max)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([expiresAt])
+  @@index([userId])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.NVarChar(64)
+  userId    String?  @db.NVarChar(64)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String   @db.NVarChar(100)
+  entity    String   @db.NVarChar(100)
+  entityId  String?  @db.NVarChar(64)
+  details   String?  @db.NVarChar(Max)
+  ipAddress String?  @db.NVarChar(50)
+  userAgent String?  @db.NVarChar(500)
+  createdAt DateTime @default(now())
+
+  @@index([action, createdAt])
+  @@index([entity, entityId])
+}
