@@ -15,6 +15,7 @@ node_modules/
 dist/
 build/
 *.tsbuildinfo
+*.zip
 
 # Prisma generated outputs
 /backend/generated/
